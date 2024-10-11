@@ -1,0 +1,13 @@
+{
+  "name": "blockchainemnodejs",
+  "version": "1.0.0",
+  "description": "Projeto simulando uma Blockchain básica, utilizando JavaScript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./src/index.js"
+  },
+  "type": "module",
+  "author": "José Júnior (josec-junior)",
+  "license": "ISC"
+}
