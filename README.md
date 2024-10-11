@@ -11,7 +11,7 @@ Você pode instalar o Node.js junto com o *Node Package Manager* (npm) pelo site
 ## Configuração Inicial ⚙️
 
 Para poder utilizar a aplicação, clone o repositório remoto para a sua máquina local, através do comando:
-`git clone https://github.com/josec-junior/`
+`git clone https://github.com/josec-junior/BlockchainEmNodeJS.git`
 
 Após clonar o repositório, abra-o em um terminal ou alguma IDE, como o *Visual Studio Code*.
 
