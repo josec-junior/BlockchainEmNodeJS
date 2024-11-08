@@ -1,6 +1,6 @@
 # 🔗 *Blockchain* em Node.js 🟢
 
-Este projeto implementa um sistema de *Blockchain* simples em **Node.js**, utilizando a estrutura de dados **Lista Encadeada**, sem a presença do *nonce* nos blocos da cadeia e sem o sistema de mineração e de *Proof of Work*; trata-se da(o) 1º atividade/desafio individual proposto durante a trilha de aprendizado do Estágio em *AWS, Blockchain e Real Digital* da empresa **Compass UOL**.
+Este projeto implementa um sistema de *Blockchain* simples em **Node.js**, utilizando a estrutura de dados **Lista Encadeada**, com um sistema simples de mineração e de *Proof of Work* e sem a presença de carteiras com o par de chaves pública e privada; trata-se da(o) 2º atividade/desafio individual proposto durante a trilha de aprendizado do Estágio em *AWS, Blockchain e Real Digital* da empresa **Compass UOL**.
 
 ## Pré-requisitos ℹ️
 Antes de tudo, certifique-se de que você tenha instalado na sua máquina o Node.js (versão 10.0.0 ou superior), para garantir que o projeto funcione corretamente; o projeto não utiliza nenhuma biblioteca externa, apenas a biblioteca `crypto`, nativa do Node.js.
@@ -22,28 +22,59 @@ O arquivo `package.json` já possui um script responsável por executar a aplica
 Se tudo estiver configurado corretamente, será exibido no console algo como:
 
 ```plaintext
+Bloco minerado: 0000fa31d9004918414770d002a2c724d76a29728bf473f3a75b0a608e97283a
+Bloco minerado: 000011cba8fe7e2a7d2b73e863f94311900877f69503986b16a324017ae1f434
 Genesis Block
-    Hash: 7ce64d8df3c01be4bb5529778d74cb1f75bc5ee4f10c2ceabbc8d50e27f14ceb
-    Previous Hash: 0
-    Data: Genesis Block
-    Timestamp: Fri Oct 11 2024 - 12:32:53 GMT-0300 (Horário Padrão de Brasília)
+            Hash: 0000fa31d9004918414770d002a2c724d76a29728bf473f3a75b0a608e97283a
+            Previous Hash: 0
+            Transactions:
+
+            Timestamp: Fri Nov 08 2024 - 11:09:43 GMT-0300 (Horário Padrão de Brasília)
 Block #1
-    Hash: cef3cbffe26bc5f02c7311e867c9a48b2ff34e2961ca36aa404771d1a796406a
-            Previous Hash: 7ce64d8df3c01be4bb5529778d74cb1f75bc5ee4f10c2ceabbc8d50e27f14ceb
-            Data: Primeira transação realizada após o Bloco Gênesis
-            Timestamp: Fri Oct 11 2024 - 12:32:53 GMT-0300 (Horário Padrão de Brasília)
-Block #2
-            Hash: 90a62b1019e1fd31f6424de18ffdff9e73ce2d2c5aca19d35393aa41dc6a01fa
-            Previous Hash: cef3cbffe26bc5f02c7311e867c9a48b2ff34e2961ca36aa404771d1a796406a
-            Data: Segunda transação realizada após o bloco gênesis
-            Timestamp: Fri Oct 11 2024 - 12:32:53 GMT-0300 (Horário Padrão de Brasília)
+            Hash: 000011cba8fe7e2a7d2b73e863f94311900877f69503986b16a324017ae1f434
+            Previous Hash: 0000fa31d9004918414770d002a2c724d76a29728bf473f3a75b0a608e97283a
+            Transactions:
+Sender: AB1C3D5E78 | Receiver: CD9A7E54B2 | Amount: 100
+Sender: CD9A7E54B2 | Receiver: AB1C3D5E78 | Amount: 50
+            Timestamp: Fri Nov 08 2024 - 11:09:43 GMT-0300 (Horário Padrão de Brasília)
 
 1º Teste - Esta Blockchain é válida? true
 
-2º Teste - A Blockchain é válida após modificar os dados do bloco da primeira transação? false
+2º Teste - Endereço AB1C3D5E78 é válido? true
 
-3º Teste - A Blockchain é valída após modificar o hash do bloco da primeira transação? false
+2º Teste - Endereço CD9A7E54B2 é válido? true
+
+3º Teste - Histórico de transações do endereço AB1C3D5E78: [
+  {
+    "sender": "AB1C3D5E78",
+    "receiver": "CD9A7E54B2",
+    "amount": 100,
+    "timestamp": "Fri Nov 08 2024 - 11:09:43 GMT-0300 (Horário Padrão de Brasília)"
+  },
+  {
+    "sender": "CD9A7E54B2",
+    "receiver": "AB1C3D5E78",
+    "amount": 50,
+    "timestamp": "Fri Nov 08 2024 - 11:09:43 GMT-0300 (Horário Padrão de Brasília)"
+  }
+]
+
+3º Teste - Histórico de transações do endereço CD9A7E54B2: [
+  {
+    "sender": "AB1C3D5E78",
+    "receiver": "CD9A7E54B2",
+    "amount": 100,
+    "timestamp": "Fri Nov 08 2024 - 11:09:43 GMT-0300 (Horário Padrão de Brasília)"
+  },
+  {
+    "sender": "CD9A7E54B2",
+    "receiver": "AB1C3D5E78",
+    "amount": 50,
+    "timestamp": "Fri Nov 08 2024 - 11:09:43 GMT-0300 (Horário Padrão de Brasília)"
+  }
+]
 ```
+
 **Obs**: São gerados *hashes* diferentes a cada execução, com base nos dados e no *hash* do bloco, assim como o *hash* do bloco anterior e a data e hora que o bloco foi criado (*timestamp*).
 
 Caso você utilize o *Visual Studio Code* e tenha a extensão `Node.js Exec`, também pode executar a aplicação abrindo o arquivo `index.js` e apertando a tecla **F8**.
@@ -56,11 +87,15 @@ Essa aplicação conta com as seguintes funcionalidades:
 - Calculo de *Hash* para cada bloco da cadeia;
 - Visualizar toda a cadeia de blocos;
 - Acessar o último bloco da cadeia;
-- Validar a cadeia. 
+- Validação da cadeia;
+- Criação de transações simples entre dois endereços;
+- Validação de endereços, obedecendo ao critério 2 letras e 8 caracteres hexadecimais;
+- Mineração de blocos;
+- Visualizar o histórico de transações de um determinado endereço.
 
 ## Considerações Finais 🔮
 
-Como mencionado no início deste `README`, este projeto simula um sistema de *Blockchain* simples, sem a presença do *Nonce* de cada bloco e consequentemente sem a presença do sistema de mineração e *Proof of Work*, além disso, os dados são **mockados**, sinta-se a vontade para implementar melhorias no código, como o *Nonce* de cada bloco, o sistema de mineração e uma entrada de dados dinâmica.
+Como mencionado no início deste `README`, este projeto simula um sistema de *Blockchain* simples, com um sistema simples de transações, mineração e *Proof of Work*, além disso, não há a presença de carteira com par de chaves pública e privada e os dados são **mockados**, sinta-se a vontade para implementar melhorias no código, como a adição de carteiras com um par de chaves pública e privada e uma entrada de dados dinâmica.
 
 <!-- Imagens centralizadas utilizando HTML -->
 <p align = "center">
