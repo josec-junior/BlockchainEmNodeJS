@@ -1,26 +1,38 @@
 import Blockchain from "./blockchain.js"
+import Transaction from "./transaction.js"
 
 const compassChain = new Blockchain()
 
-const block1 = compassChain.generateNextBlock("Primeira transação realizada após o Bloco Gênesis")
-compassChain.addBlock(block1)
+// Função de mineração com prova de trabalho
+const minePendingTransactions = (minerAddress) => {
+    // Minere o bloco de transações pendentes
+    compassChain.minePendingTransactions(minerAddress)
+}
 
-const block2 = compassChain.generateNextBlock("Segunda transação realizada após o bloco gênesis")
-compassChain.addBlock(block2)
+// Criando endereços
+const wallet1 = "AB1C3D5E78"
+const wallet2 = "CD9A7E54B2"
 
-console.log(`${compassChain.getChain()}\n`)
+// Criando transações
+const transaction1 = new Transaction(wallet1, wallet2, 100)
+const transaction2 = new Transaction(wallet2, wallet1, 50)
+
+// Adicionando transações
+compassChain.addTransaction(transaction1)
+compassChain.addTransaction(transaction2)
+
+// Mineração das transações pendentes
+minePendingTransactions(wallet1)
+
+console.log(`${compassChain.getChain()}`)
 
 // Teste 1: Verificando a validade da cadeia correta
 console.log(`1º Teste - Esta Blockchain é válida? ${compassChain.isValidChain()}\n`)
 
-// Teste 2: Alterando os dados de um bloco
-block1.data = "Dados alterados!"
-console.log(`2º Teste - A Blockchain é válida após modificar os dados do bloco da primeira transação? ${compassChain.isValidChain()}\n`)
+// Teste 2: Validando os endereços
+console.log(`2º Teste - Endereço ${wallet1} é válido? ${transaction1.isValidAddress(wallet1)}\n`)
+console.log(`2º Teste - Endereço ${wallet2} é válido? ${transaction2.isValidAddress(wallet2)}\n`)
 
-// Revertendo a alteração para continuar os testes
-block1.data = "Primeira transação realizada após o Bloco Gênesis"
-block1.hash = block1.calculateHash()
-
-// Teste 3 - Alterando o hash de um bloco
-block1.hash = "Hash diferenciado"
-console.log(`3º Teste - A Blockchain é valída após modificar o hash do bloco da primeira transação? ${compassChain.isValidChain()}`)
+// Teste 3: Verificando o histórico de transações
+console.log(`3º Teste - Histórico de transações do endereço ${wallet1}: ${JSON.stringify(compassChain.getTransactionHistory(wallet1), null, 2)}\n`)
+console.log(`3º Teste - Histórico de transações do endereço ${wallet2}: ${JSON.stringify(compassChain.getTransactionHistory(wallet2), null, 2)}\n`)
